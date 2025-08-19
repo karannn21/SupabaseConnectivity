@@ -73,11 +73,11 @@ export default function TwoLevelSidebar({
   const activeItemData = sidebarItems.find((item) => item.id === activeItem);
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
       {/* Primary Sidebar - Fixed width, no layout shifts */}
-      <div className="w-16 bg-gray-200 border-r border-gray-300 flex flex-col items-center py-4 shadow-sm relative z-20 flex-shrink-0">
+      <div className="w-16 bg-gray-200 dark:bg-gray-800 border-r border-gray-300 dark:border-gray-600 flex flex-col items-center py-4 shadow-sm relative z-20 flex-shrink-0 transition-colors duration-200">
         {/* Logo */}
-        <div className="w-10 h-10 rounded-lg bg-white border border-gray-300 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-500 flex items-center justify-center transition-colors duration-200">
           <Image
             src="/talent.png"
             alt="Logo"
@@ -99,7 +99,7 @@ export default function TwoLevelSidebar({
                 className={`w-10 h-10 flex items-center justify-center rounded-lg transition-all duration-200 border-2 ${
                   activeItem === item.id
                     ? "border-blue-500 text-blue-500 bg-transparent"
-                    : "border-transparent text-gray-600 hover:border-gray-400 hover:text-gray-900 hover:bg-gray-100"
+                    : "border-transparent text-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                 }`}
                 title={item.label}
               >
@@ -122,7 +122,7 @@ export default function TwoLevelSidebar({
       >
         {/* Secondary Sidebar Content - Slides in/out */}
         <div
-          className={`absolute left-0 top-0 h-full w-64 bg-gray-200 border-r border-gray-300 transition-transform duration-300 ease-in-out overflow-hidden shadow-lg z-10 ${
+          className={`absolute left-0 top-0 h-full w-64 bg-gray-200 dark:bg-gray-800 border-r border-gray-300 dark:border-gray-600 transition-all duration-300 ease-in-out overflow-hidden shadow-lg z-10 ${
             isSecondaryOpen
               ? "transform translate-x-0"
               : "transform -translate-x-full"
@@ -130,13 +130,13 @@ export default function TwoLevelSidebar({
         >
           {activeItemData && (
             <div className="h-full flex flex-col">
-              <div className="flex items-center justify-start p-4 border-b border-gray-200 flex-shrink-0">
-                <h1 className="text-xl font-semibold text-gray-800">
+              <div className="flex items-center justify-start p-4 border-b border-gray-200 dark:border-gray-600 flex-shrink-0">
+                <h1 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
                   {activeItemData.label}
                 </h1>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-4 text-gray-800 text-lg">
+              <div className="flex-1 overflow-y-auto p-4 text-gray-800 dark:text-gray-200 text-lg">
                 {activeItemData.subItems.map((sub) => {
                   const isActiveParent = activeSecondary === sub.label;
                   const hasActiveNestedChild = sub.subItems?.some(
@@ -154,7 +154,7 @@ export default function TwoLevelSidebar({
                         className={`cursor-pointer p-2 flex items-center justify-between transition-all duration-200 rounded-lg border-2 ${
                           shouldShowAsActive
                             ? "border-blue-500 text-blue-500 bg-transparent"
-                            : "border-transparent text-gray-800 hover:bg-gray-300"
+                            : "border-transparent text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700"
                         }`}
                         onClick={() => handleSubItemClick(sub)}
                       >
@@ -206,7 +206,7 @@ export default function TwoLevelSidebar({
                                         className={`absolute left-0 top-0 w-0.5 h-[50%] transition-colors duration-200 ${
                                           isNestedActive || hasActiveItemBelow
                                             ? "bg-blue-500"
-                                            : "bg-gray-400"
+                                            : "bg-gray-400 dark:bg-gray-500"
                                         }`}
                                       />
 
@@ -214,7 +214,7 @@ export default function TwoLevelSidebar({
                                         className={`absolute left-0 top-[50%] w-0.5 h-[50%] transition-colors duration-200 ${
                                           hasActiveItemBelow
                                             ? "bg-blue-500"
-                                            : "bg-gray-400"
+                                            : "bg-gray-400 dark:bg-gray-500"
                                         }`}
                                       />
                                     </>
@@ -225,7 +225,7 @@ export default function TwoLevelSidebar({
                                       className={`absolute left-0 top-0 w-0.5 h-[40%] transition-colors duration-200 ${
                                         isNestedActive
                                           ? "bg-blue-500"
-                                          : "bg-gray-400"
+                                          : "bg-gray-400 dark:bg-gray-500"
                                       }`}
                                     />
                                   )}
@@ -235,11 +235,11 @@ export default function TwoLevelSidebar({
                                     className={`absolute left-0 top-[0.1rem] w-7 h-6 border-l-2 border-b-2 rounded-bl-lg transition-colors duration-200 ${
                                       isNestedActive || hasActiveItemBelow
                                         ? "border-l-blue-500"
-                                        : "border-l-gray-400"
+                                        : "border-l-gray-400 dark:border-l-gray-500"
                                     } ${
                                       isNestedActive
                                         ? "border-b-blue-500"
-                                        : "border-b-gray-400"
+                                        : "border-b-gray-400 dark:border-b-gray-500"
                                     }`}
                                   />
 
@@ -249,7 +249,7 @@ export default function TwoLevelSidebar({
                                     className={`cursor-pointer p-2 pl-10 transition-all duration-200 rounded flex-1 min-w-0 text-left w-full ${
                                       isNestedActive
                                         ? "text-blue-500 font-medium bg-transparent"
-                                        : "hover:bg-gray-300 text-gray-800"
+                                        : "hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200"
                                     }`}
                                     onClick={() =>
                                       setActiveSecondary(nested.label)
@@ -277,16 +277,16 @@ export default function TwoLevelSidebar({
       {/* Toggle Button - Positioned on the border of secondary sidebar */}
       <div
         className={`absolute top-6 z-30 transition-all duration-300 ease-in-out ${
-          isSecondaryOpen ? "left-[272px]" : "left-16"
+          isSecondaryOpen ? "left-[319px]" : "left-16"
         }`}
       >
         <button
           onClick={toggleSecondary}
-          className="bg-gray-200 border-2 border-gray-300 rounded-full p-1 shadow-md hover:shadow-lg hover:border-gray-400 transition-all duration-200 transform -translate-x-1/2 group"
+          className="bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-500 rounded-full p-1 shadow-md hover:shadow-lg hover:border-gray-400 dark:hover:border-gray-400 transition-all duration-200 transform -translate-x-1/2 group"
           title={isSecondaryOpen ? "Collapse Sidebar" : "Expand Sidebar"}
         >
           <ArrowLeftIcon
-            className={`h-3 w-3 text-gray-600 group-hover:text-gray-800 transition-all duration-300 ${
+            className={`h-3 w-3 text-gray-600 dark:text-gray-300 group-hover:text-gray-800 dark:group-hover:text-gray-100 transition-all duration-300 ${
               isSecondaryOpen ? "rotate-0" : "rotate-180"
             }`}
           />
@@ -298,7 +298,7 @@ export default function TwoLevelSidebar({
         <Navbar />
         <main className="flex-1 p-6 overflow-y-auto">
           {activeSecondary ? (
-            <div className="text-gray-800 text-lg">
+            <div className="text-gray-800 dark:text-gray-200 text-lg">
               Welcome to {activeSecondary} page!
             </div>
           ) : (

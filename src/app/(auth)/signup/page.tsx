@@ -28,29 +28,35 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
       <form
         onSubmit={handleSignup}
-        className="bg-white p-6 rounded-lg shadow-md w-96"
+        className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md w-96 transition-colors duration-200"
       >
-        <h1 className="text-2xl font-bold mb-4">Sign Up</h1>
+        <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+          Sign Up
+        </h1>
 
         {error && <p className="text-red-500 mb-2">{error}</p>}
         {success && <p className="text-green-500 mb-2">{success}</p>}
 
-        <label className="block mb-2">Email</label>
+        <label className="block mb-2 text-gray-700 dark:text-gray-300">
+          Email
+        </label>
         <input
           type="email"
-          className="w-full p-2 border rounded mb-4"
+          className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded mb-4 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-200"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
 
-        <label className="block mb-2">Password</label>
+        <label className="block mb-2 text-gray-700 dark:text-gray-300">
+          Password
+        </label>
         <input
           type="password"
-          className="w-full p-2 border rounded mb-4"
+          className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded mb-4 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-200"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
@@ -59,14 +65,17 @@ export default function SignupPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition disabled:opacity-50"
+          className="w-full bg-blue-500 dark:bg-blue-600 text-white p-2 rounded hover:bg-blue-600 dark:hover:bg-blue-500 transition-colors duration-200 disabled:opacity-50"
         >
           {loading ? "Signing up..." : "Sign Up"}
         </button>
 
-        <p className="text-center mt-4 text-gray-600">
+        <p className="text-center mt-4 text-gray-600 dark:text-gray-300">
           Already have an account?{" "}
-          <Link href="/login" className="text-blue-600 hover:underline">
+          <Link
+            href="/login"
+            className="text-blue-600 dark:text-blue-400 hover:underline"
+          >
             Login
           </Link>
         </p>
