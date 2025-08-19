@@ -1,28 +1,30 @@
 "use client";
+
 import { useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import Link from "next/link";
+import { authService } from "@/lib/auth";
 
 export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSignup = async (e) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     setError("");
     setSuccess("");
 
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    const { error } = await authService.signUp({ email, password });
 
     if (error) {
       setError(error.message);
     } else {
       setSuccess("Signup successful! Check your email for confirmation.");
     }
+    setLoading(false);
   };
 
   return (
@@ -42,6 +44,7 @@ export default function SignupPage() {
           className="w-full p-2 border rounded mb-4"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
 
         <label className="block mb-2">Password</label>
@@ -50,14 +53,23 @@ export default function SignupPage() {
           className="w-full p-2 border rounded mb-4"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
 
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded"
+          disabled={loading}
+          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition disabled:opacity-50"
         >
-          Sign Up
+          {loading ? "Signing up..." : "Sign Up"}
         </button>
+
+        <p className="text-center mt-4 text-gray-600">
+          Already have an account?{" "}
+          <Link href="/login" className="text-blue-600 hover:underline">
+            Login
+          </Link>
+        </p>
       </form>
     </div>
   );

@@ -1,26 +1,30 @@
 "use client";
+
 import { useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { authService } from "@/lib/auth";
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    setLoading(true);
+    setErrorMsg("");
+
+    const { error } = await authService.signIn({ email, password });
 
     if (error) {
       setErrorMsg(error.message);
     } else {
       router.push("/protected");
     }
+    setLoading(false);
   };
 
   return (
@@ -46,14 +50,21 @@ export default function LoginPage() {
           />
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white p-3 rounded hover:bg-indigo-700 transition"
+            disabled={loading}
+            className="w-full bg-indigo-600 text-white p-3 rounded hover:bg-indigo-700 transition disabled:opacity-50"
           >
-            Login
+            {loading ? "Signing in..." : "Login"}
           </button>
         </form>
         {errorMsg && (
           <p className="text-red-500 mt-4 text-center">{errorMsg}</p>
         )}
+        <p className="text-center mt-4 text-gray-600">
+          Don&apos;t have an account?{" "}
+          <Link href="/signup" className="text-indigo-600 hover:underline">
+            Sign up
+          </Link>
+        </p>
       </div>
     </div>
   );

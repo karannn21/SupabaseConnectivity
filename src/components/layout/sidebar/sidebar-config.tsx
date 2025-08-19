@@ -15,9 +15,9 @@ import {
   UsersRound,
   ChartNoAxesColumnIncreasing,
 } from "lucide-react";
+import { SidebarItem } from "@/types/sidebar";
 
-// 🎯 HEROUI SIDEBAR ITEMS (refactored)
-export const sidebarItems = [
+export const sidebarItems: SidebarItem[] = [
   {
     id: "dashboard",
     iconOutline: Home,

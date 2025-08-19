@@ -1,36 +1,149 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Supa Auth - Next.js Authentication App
 
-## Getting Started
+A modern, full-stack authentication application built with Next.js 15, Supabase, and HeroUI.
 
-First, run the development server:
+## ✨ Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- 🔐 **Complete Authentication Flow** - Login, signup, logout with Supabase
+- 🎨 **Modern UI** - Built with HeroUI and Tailwind CSS
+- 📱 **Responsive Design** - Works perfectly on all devices
+- 🚀 **Two-Level Sidebar** - Advanced navigation with smooth animations
+- 🔒 **Protected Routes** - Secure pages with authentication guards
+- ⚡ **TypeScript** - Full type safety throughout the application
+- 🎯 **Clean Architecture** - Well-organized, maintainable code structure
+
+## 🏗️ Project Structure
+
+```
+src/
+├── app/                          # Next.js App Router
+│   ├── (auth)/                   # Auth route group
+│   │   ├── login/               # Login page
+│   │   └── signup/              # Signup page
+│   ├── protected/               # Protected dashboard
+│   ├── layout.tsx               # Root layout
+│   └── page.tsx                 # Home page
+├── components/                   # Reusable components
+│   ├── auth/                    # Authentication components
+│   ├── layout/                  # Layout components
+│   │   ├── navbar.tsx          # Navigation bar
+│   │   └── sidebar/            # Sidebar system
+│   └── ui/                     # UI components
+├── hooks/                       # Custom React hooks
+├── lib/                         # Utilities and configurations
+│   ├── auth.ts                 # Authentication service
+│   ├── constants.ts            # App constants
+│   └── supabase.ts             # Supabase client
+└── types/                      # TypeScript type definitions
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Getting Started
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Prerequisites
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Node.js 18+
+- npm/yarn/pnpm
+- Supabase account
 
-## Learn More
+### Installation
 
-To learn more about Next.js, take a look at the following resources:
+1. **Clone the repository**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   git clone <your-repo-url>
+   cd supa-auth
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. **Install dependencies**
 
-## Deploy on Vercel
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Set up environment variables**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   cp .env.example .env.local
+   ```
+
+   Fill in your Supabase credentials:
+
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+
+4. **Run the development server**
+
+   ```bash
+   npm run dev
+   ```
+
+5. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## 🔧 Configuration
+
+### Supabase Setup
+
+1. Create a new project at [supabase.com](https://supabase.com)
+2. Go to Settings > API to get your project URL and anon key
+3. Add these to your `.env.local` file
+
+### Sidebar Customization
+
+The sidebar is fully customizable through `src/components/layout/sidebar/sidebar-config.tsx`. See `SIDEBAR_CUSTOMIZATION_GUIDE.md` for detailed instructions.
+
+## 📦 Tech Stack
+
+- **Framework:** Next.js 15 with App Router
+- **Authentication:** Supabase Auth
+- **UI Library:** HeroUI (NextUI v2)
+- **Styling:** Tailwind CSS
+- **Icons:** Lucide React, Heroicons
+- **Animations:** Framer Motion
+- **Language:** TypeScript
+- **Font:** Geist Sans & Geist Mono
+
+## 🎯 Key Improvements Made
+
+### Architecture
+
+- ✅ **Route Groups** - Organized auth pages with `(auth)` group
+- ✅ **Component Organization** - Logical folder structure for components
+- ✅ **TypeScript Migration** - Full TypeScript implementation
+- ✅ **Custom Hooks** - Reusable authentication logic
+- ✅ **Service Layer** - Centralized API calls
+
+### Code Quality
+
+- ✅ **Type Safety** - Comprehensive TypeScript types
+- ✅ **Error Handling** - Proper error states and loading states
+- ✅ **Separation of Concerns** - Clean component responsibilities
+- ✅ **Reusable Components** - DRY principle implementation
+
+### User Experience
+
+- ✅ **Loading States** - Smooth loading indicators
+- ✅ **Error Messages** - Clear user feedback
+- ✅ **Protected Routes** - Secure navigation
+- ✅ **Responsive Design** - Mobile-first approach
+
+## 🚦 Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+
+## 📝 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
