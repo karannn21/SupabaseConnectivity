@@ -130,7 +130,7 @@ export default function TwoLevelSidebar({
         >
           {activeItemData && (
             <div className="h-full flex flex-col">
-              <div className="flex items-center justify-start p-4 border-b border-gray-200 dark:border-gray-600 flex-shrink-0">
+              <div className="flex items-center justify-start p-4  border-gray-200 dark:border-gray-600 flex-shrink-0">
                 <h1 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
                   {activeItemData.label}
                 </h1>
