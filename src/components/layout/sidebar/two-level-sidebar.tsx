@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -12,6 +12,7 @@ import {
 import { sidebarItems } from "./sidebar-config";
 import Navbar from "../navbar";
 import { SubItem } from "@/types/sidebar";
+import { Button } from "@heroui/button";
 
 export default function TwoLevelSidebar({
   children,
@@ -19,10 +20,31 @@ export default function TwoLevelSidebar({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
   const [activeSecondary, setActiveSecondary] = useState<string | null>(null);
   const [expandedSubItem, setExpandedSubItem] = useState<string | null>(null);
+
+  // Set active states when on Analytics Overview page (but don't auto-open sidebar)
+  useEffect(() => {
+    const analyticsOverviewPath = "/protected/analytics-overview";
+    if (pathname === analyticsOverviewPath) {
+      setActiveSecondary("Analytics Overview");
+      // DON'T auto-open sidebar: setIsSecondaryOpen(true);
+
+      // Find and set the parent item (Dashboard)
+      const parentItem = sidebarItems.find((item) =>
+        item.subItems.some((sub) => sub.label === "Analytics Overview")
+      );
+
+      if (parentItem) {
+        setActiveItem(parentItem.id);
+        // Also set the expanded sub-item so it shows when sidebar opens
+        setExpandedSubItem("Overview");
+      }
+    }
+  }, [pathname]);
 
   const handleIconClick = (itemId: string) => {
     if (activeItem === itemId && isSecondaryOpen) {
@@ -40,7 +62,7 @@ export default function TwoLevelSidebar({
 
   const toggleSecondary = () => {
     if (!isSecondaryOpen) {
-      // Opening sidebar → default to Dashboard
+      // Opening sidebar → default to Dashboard if no active item
       if (!activeItem) {
         const dashboardItem = sidebarItems.find(
           (item) => item.label.toLowerCase() === "dashboard"
@@ -55,16 +77,12 @@ export default function TwoLevelSidebar({
 
   const handleSubItemClick = (sub: SubItem) => {
     if (sub.subItems) {
-      // If clicking on Candidate again → toggle expand/collapse
       if (expandedSubItem === sub.label) {
         setExpandedSubItem(null);
-        // Don't clear activeSecondary, keep showing the previously selected nested item
       } else {
         setExpandedSubItem(sub.label);
-        // Auto-select the first sub-item when expanding
         if (sub.subItems.length > 0) {
           setActiveSecondary(sub.subItems[0].label);
-          // Only navigate for Analytics Overview, others show welcome message
           if (
             sub.subItems[0].label === "Analytics Overview" &&
             sub.subItems[0].href
@@ -74,24 +92,30 @@ export default function TwoLevelSidebar({
         }
       }
     } else {
-      // When clicking on other items, update state and conditionally navigate
       setActiveSecondary(sub.label);
       setExpandedSubItem(null);
 
-      // Only navigate for Analytics Overview, others show welcome message
       if (sub.label === "Analytics Overview" && sub.href) {
         router.push(sub.href);
       }
     }
   };
 
+  const handleAnalyticsOverviewClick = (href: string) => {
+    setActiveSecondary("Analytics Overview");
+    // Close sidebar after navigation
+    setIsSecondaryOpen(false);
+    setActiveItem(null);
+    setExpandedSubItem(null);
+    router.push(href);
+  };
+
   const activeItemData = sidebarItems.find((item) => item.id === activeItem);
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
-      {/* Primary Sidebar - Fixed width, no layout shifts */}
+      {/* Primary Sidebar */}
       <div className="w-16 bg-gray-200 dark:bg-gray-800 border-r border-gray-300 dark:border-gray-600 flex flex-col items-center py-4 shadow-sm relative z-20 flex-shrink-0 transition-colors duration-200">
-        {/* Logo */}
         <div className="w-10 h-10 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-500 flex items-center justify-center transition-colors duration-200">
           <Image
             src="/talent.png"
@@ -102,16 +126,17 @@ export default function TwoLevelSidebar({
           />
         </div>
 
-        {/* Navigation Icons */}
-        <div className="space-y-2 mt-8">
+        <div className="space-y-0.5 mt-5">
           {sidebarItems.map((item) => {
             const Icon =
               activeItem === item.id ? item.iconSolid : item.iconOutline;
+
             return (
-              <button
+              <Button
                 key={item.id}
                 onClick={() => handleIconClick(item.id)}
-                className={`w-10 h-10 flex items-center justify-center rounded-lg transition-all duration-200 border-2 ${
+                variant="ghost"
+                className={`w-13 h-13 flex items-center justify-center rounded-lg transition-all duration-200 border-2 ${
                   activeItem === item.id
                     ? "border-blue-500 text-blue-500 bg-transparent"
                     : "border-transparent text-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -119,23 +144,22 @@ export default function TwoLevelSidebar({
                 title={item.label}
               >
                 <Icon
-                  className="h-5 w-5"
+                  className="w-5 h-5" // ✅ bigger Tailwind size
                   fill={activeItem === item.id ? "currentColor" : "none"}
                   stroke="currentColor"
                 />
-              </button>
+              </Button>
             );
           })}
         </div>
       </div>
 
-      {/* Secondary Sidebar Container - Always reserves space */}
+      {/* Secondary Sidebar */}
       <div
         className={`relative flex-shrink-0 transition-all duration-300 ease-in-out ${
           isSecondaryOpen ? "w-64" : "w-0"
         }`}
       >
-        {/* Secondary Sidebar Content - Slides in/out */}
         <div
           className={`absolute left-0 top-0 h-full w-64 bg-gray-200 dark:bg-gray-800 border-r border-gray-300 dark:border-gray-600 transition-all duration-300 ease-in-out overflow-hidden shadow-lg z-10 ${
             isSecondaryOpen
@@ -145,7 +169,7 @@ export default function TwoLevelSidebar({
         >
           {activeItemData && (
             <div className="h-full flex flex-col">
-              <div className="flex items-center justify-start p-4  border-gray-200 dark:border-gray-600 flex-shrink-0">
+              <div className="flex items-center justify-start p-4 border-gray-200 dark:border-gray-600 flex-shrink-0">
                 <h1 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
                   {activeItemData.label}
                 </h1>
@@ -159,35 +183,45 @@ export default function TwoLevelSidebar({
                   );
                   const shouldShowAsActive =
                     isActiveParent || hasActiveNestedChild;
-
                   const isExpanded = expandedSubItem === sub.label;
 
                   return (
                     <div key={sub.label} className="mb-1">
-                      {/* Parent Subitem - Fixed border to prevent layout shifts */}
                       {sub.href &&
                       !sub.subItems &&
                       sub.label === "Analytics Overview" ? (
-                        <Link
-                          href={sub.href}
-                          className={`cursor-pointer p-2 flex items-center justify-between transition-all duration-200 rounded-lg border-2 block ${
+                        <Button
+                          variant="ghost"
+                          className={`w-full flex items-center justify-between rounded-lg text-sm mb-4 ${
                             shouldShowAsActive
-                              ? "border-blue-500 text-blue-500 bg-transparent"
-                              : "border-transparent text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700"
+                              ? "p-[1px] rainbow-border border-2 border-blue-500 hover:border-transparent text-blue-500 bg-blue-50 dark:bg-blue-900/20"
+                              : "p-2 border-2 border-transparent text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700"
                           }`}
-                          onClick={() => setActiveSecondary(sub.label)}
+                          onClick={() =>
+                            handleAnalyticsOverviewClick(sub.href!)
+                          }
                         >
-                          <div className="flex items-center">
-                            <sub.icon className="inline-block mr-2 h-5 w-5 flex-shrink-0" />
-                            <span className="truncate">{sub.label}</span>
-                          </div>
-                        </Link>
+                          {shouldShowAsActive ? (
+                            <span className="flex items-center justify-between w-full h-full bg-blue-50 dark:bg-blue-900/20 rounded-lg p-2 transition-colors duration-200">
+                              <div className="flex items-center">
+                                <sub.icon className="inline-block mr-2 h-5 w-5 flex-shrink-0" />
+                                <span className="truncate">{sub.label}</span>
+                              </div>
+                            </span>
+                          ) : (
+                            <div className="flex items-center">
+                              <sub.icon className="inline-block mr-2 h-5 w-5 flex-shrink-0" />
+                              <span className="truncate">{sub.label}</span>
+                            </div>
+                          )}
+                        </Button>
                       ) : (
-                        <div
-                          className={`cursor-pointer p-2 flex items-center justify-between transition-all duration-200 rounded-lg border-2 ${
+                        <Button
+                          variant="ghost"
+                          className={`w-full flex items-center justify-between rounded-lg text-sm mb-4 ${
                             shouldShowAsActive
-                              ? "border-blue-500 text-blue-500 bg-transparent"
-                              : "border-transparent text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700"
+                              ? "p-[1px] rainbow-border border-2 border-blue-500 hover:border-transparent text-blue-500 bg-blue-50 dark:bg-blue-900/20"
+                              : "p-2 border-2 border-transparent text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700"
                           }`}
                           onClick={() => handleSubItemClick(sub)}
                         >
@@ -204,20 +238,17 @@ export default function TwoLevelSidebar({
                               )}
                             </div>
                           )}
-                        </div>
+                        </Button>
                       )}
 
-                      {/* Nested Children - Smooth height animation */}
                       {sub.subItems && (
                         <div
-                          className={`ml-4 -mt-1.5 overflow-hidden transition-all duration-300 ease-in-out ${
+                          className={`ml-4 -mt-5.5 overflow-hidden transition-all duration-300 ease-in-out ${
                             isExpanded
                               ? "max-h-96 opacity-100"
                               : "max-h-0 opacity-0"
                           }`}
-                          style={{
-                            transitionProperty: "max-height, opacity",
-                          }}
+                          style={{ transitionProperty: "max-height, opacity" }}
                         >
                           <div className="py-1">
                             {sub.subItems.map((nested, index) => {
@@ -233,7 +264,7 @@ export default function TwoLevelSidebar({
                                   key={nested.label}
                                   className="relative flex items-center"
                                 >
-                                  {/* Vertical line above */}
+                                  {/* Vertical line */}
                                   {!isLast && (
                                     <>
                                       <div
@@ -324,13 +355,14 @@ export default function TwoLevelSidebar({
         </div>
       </div>
 
-      {/* Toggle Button - Positioned on the border of secondary sidebar */}
+      {/* Toggle Button */}
       <div
         className={`absolute top-6 z-30 transition-all duration-300 ease-in-out ${
           isSecondaryOpen ? "left-[319px]" : "left-16"
         }`}
       >
-        <button
+        <Button
+          variant="ghost"
           onClick={toggleSecondary}
           className="bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-500 rounded-full p-1 shadow-md hover:shadow-lg hover:border-gray-400 dark:hover:border-gray-400 transition-all duration-200 transform -translate-x-1/2 group"
           title={isSecondaryOpen ? "Collapse Sidebar" : "Expand Sidebar"}
@@ -340,10 +372,10 @@ export default function TwoLevelSidebar({
               isSecondaryOpen ? "rotate-0" : "rotate-180"
             }`}
           />
-        </button>
+        </Button>
       </div>
 
-      {/* Main Content - No layout shifts */}
+      {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 relative z-0">
         <Navbar />
         <main className="flex-1 p-6 overflow-y-auto">
@@ -370,8 +402,7 @@ export default function TwoLevelSidebar({
                     Welcome to {activeSecondary}
                   </h1>
                   <p className="text-gray-600 dark:text-gray-400 mb-6">
-                    {` This page is coming soon. We're working hard to bring you
-                    amazing features!`}
+                    {` This page is coming soon. We're working hard to bring you amazing features!`}
                   </p>
                   <div className="inline-flex items-center px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-lg text-sm">
                     <svg

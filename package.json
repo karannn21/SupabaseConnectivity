@@ -17,6 +17,7 @@
     "@heroui/react": "^2.8.2",
     "@heroui/system": "^2.4.20",
     "@heroui/theme": "^2.4.20",
+    "@radix-ui/react-slot": "^1.2.3",
     "@supabase/supabase-js": "^2.54.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
