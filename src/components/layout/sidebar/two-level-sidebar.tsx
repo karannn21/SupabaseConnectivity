@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import {
   ArrowLeftIcon,
   ChevronRightIcon,
@@ -16,6 +18,7 @@ export default function TwoLevelSidebar({
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
   const [activeSecondary, setActiveSecondary] = useState<string | null>(null);
@@ -61,12 +64,24 @@ export default function TwoLevelSidebar({
         // Auto-select the first sub-item when expanding
         if (sub.subItems.length > 0) {
           setActiveSecondary(sub.subItems[0].label);
+          // Only navigate for Analytics Overview, others show welcome message
+          if (
+            sub.subItems[0].label === "Analytics Overview" &&
+            sub.subItems[0].href
+          ) {
+            router.push(sub.subItems[0].href);
+          }
         }
       }
     } else {
-      // When clicking on other items (Overview, Jobs, Settings), close expanded sub-items
+      // When clicking on other items, update state and conditionally navigate
       setActiveSecondary(sub.label);
       setExpandedSubItem(null);
+
+      // Only navigate for Analytics Overview, others show welcome message
+      if (sub.label === "Analytics Overview" && sub.href) {
+        router.push(sub.href);
+      }
     }
   };
 
@@ -150,33 +165,52 @@ export default function TwoLevelSidebar({
                   return (
                     <div key={sub.label} className="mb-1">
                       {/* Parent Subitem - Fixed border to prevent layout shifts */}
-                      <div
-                        className={`cursor-pointer p-2 flex items-center justify-between transition-all duration-200 rounded-lg border-2 ${
-                          shouldShowAsActive
-                            ? "border-blue-500 text-blue-500 bg-transparent"
-                            : "border-transparent text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700"
-                        }`}
-                        onClick={() => handleSubItemClick(sub)}
-                      >
-                        <div className="flex items-center">
-                          <sub.icon className="inline-block mr-2 h-5 w-5 flex-shrink-0" />
-                          <span className="truncate">{sub.label}</span>
-                        </div>
-                        {sub.subItems && (
-                          <div className="ml-2 flex-shrink-0">
-                            {isExpanded ? (
-                              <ChevronDownIcon className="h-4 w-4 text-current transition-transform duration-200" />
-                            ) : (
-                              <ChevronRightIcon className="h-4 w-4 text-current transition-transform duration-200" />
-                            )}
+                      {sub.href &&
+                      !sub.subItems &&
+                      sub.label === "Analytics Overview" ? (
+                        <Link
+                          href={sub.href}
+                          className={`cursor-pointer p-2 flex items-center justify-between transition-all duration-200 rounded-lg border-2 block ${
+                            shouldShowAsActive
+                              ? "border-blue-500 text-blue-500 bg-transparent"
+                              : "border-transparent text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700"
+                          }`}
+                          onClick={() => setActiveSecondary(sub.label)}
+                        >
+                          <div className="flex items-center">
+                            <sub.icon className="inline-block mr-2 h-5 w-5 flex-shrink-0" />
+                            <span className="truncate">{sub.label}</span>
                           </div>
-                        )}
-                      </div>
+                        </Link>
+                      ) : (
+                        <div
+                          className={`cursor-pointer p-2 flex items-center justify-between transition-all duration-200 rounded-lg border-2 ${
+                            shouldShowAsActive
+                              ? "border-blue-500 text-blue-500 bg-transparent"
+                              : "border-transparent text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700"
+                          }`}
+                          onClick={() => handleSubItemClick(sub)}
+                        >
+                          <div className="flex items-center">
+                            <sub.icon className="inline-block mr-2 h-5 w-5 flex-shrink-0" />
+                            <span className="truncate">{sub.label}</span>
+                          </div>
+                          {sub.subItems && (
+                            <div className="ml-2 flex-shrink-0">
+                              {isExpanded ? (
+                                <ChevronDownIcon className="h-4 w-4 text-current transition-transform duration-200" />
+                              ) : (
+                                <ChevronRightIcon className="h-4 w-4 text-current transition-transform duration-200" />
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      )}
 
                       {/* Nested Children - Smooth height animation */}
                       {sub.subItems && (
                         <div
-                          className={`ml-4 overflow-hidden transition-all duration-300 ease-in-out ${
+                          className={`ml-4 -mt-1.5 overflow-hidden transition-all duration-300 ease-in-out ${
                             isExpanded
                               ? "max-h-96 opacity-100"
                               : "max-h-0 opacity-0"
@@ -203,7 +237,7 @@ export default function TwoLevelSidebar({
                                   {!isLast && (
                                     <>
                                       <div
-                                        className={`absolute left-0 top-0 w-0.5 h-[50%] transition-colors duration-200 ${
+                                        className={`absolute left-0 top-1 w-0.5 h-[50%] transition-colors duration-200 ${
                                           isNestedActive || hasActiveItemBelow
                                             ? "bg-blue-500"
                                             : "bg-gray-400 dark:bg-gray-500"
@@ -219,7 +253,6 @@ export default function TwoLevelSidebar({
                                       />
                                     </>
                                   )}
-
                                   {isLast && (
                                     <div
                                       className={`absolute left-0 top-0 w-0.5 h-[40%] transition-colors duration-200 ${
@@ -229,7 +262,6 @@ export default function TwoLevelSidebar({
                                       }`}
                                     />
                                   )}
-
                                   {/* Rounded corner with increased spacing */}
                                   <div
                                     className={`absolute left-0 top-[0.1rem] w-7 h-6 border-l-2 border-b-2 rounded-bl-lg transition-colors duration-200 ${
@@ -242,23 +274,41 @@ export default function TwoLevelSidebar({
                                         : "border-b-gray-400 dark:border-b-gray-500"
                                     }`}
                                   />
-
                                   {/* Text with consistent padding */}
-                                  <button
-                                    type="button"
-                                    className={`cursor-pointer p-2 pl-10 transition-all duration-200 rounded flex-1 min-w-0 text-left w-full ${
-                                      isNestedActive
-                                        ? "text-blue-500 font-medium bg-transparent"
-                                        : "hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200"
-                                    }`}
-                                    onClick={() =>
-                                      setActiveSecondary(nested.label)
-                                    }
-                                  >
-                                    <span className="truncate block">
-                                      {nested.label}
-                                    </span>
-                                  </button>
+                                  {nested.label === "Analytics Overview" &&
+                                  nested.href ? (
+                                    <Link
+                                      href={nested.href}
+                                      onClick={() =>
+                                        setActiveSecondary(nested.label)
+                                      }
+                                      className={`cursor-pointer p-2 pl-10 transition-all duration-200 rounded flex-1 min-w-0 text-left w-full block ${
+                                        isNestedActive
+                                          ? "text-blue-500 font-medium bg-transparent"
+                                          : "hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200"
+                                      }`}
+                                    >
+                                      <span className="truncate block">
+                                        {nested.label}
+                                      </span>
+                                    </Link>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        setActiveSecondary(nested.label)
+                                      }
+                                      className={`cursor-pointer p-2 pl-10 transition-all duration-200 rounded flex-1 min-w-0 text-left w-full ${
+                                        isNestedActive
+                                          ? "text-blue-500 font-medium bg-transparent"
+                                          : "hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200"
+                                      }`}
+                                    >
+                                      <span className="truncate block">
+                                        {nested.label}
+                                      </span>
+                                    </button>
+                                  )}
                                 </div>
                               );
                             })}
@@ -297,9 +347,50 @@ export default function TwoLevelSidebar({
       <div className="flex-1 flex flex-col min-w-0 relative z-0">
         <Navbar />
         <main className="flex-1 p-6 overflow-y-auto">
-          {activeSecondary ? (
-            <div className="text-gray-800 dark:text-gray-200 text-lg">
-              Welcome to {activeSecondary} page!
+          {activeSecondary && activeSecondary !== "Analytics Overview" ? (
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 border border-gray-200 dark:border-gray-700">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg
+                      className="w-8 h-8 text-blue-600 dark:text-blue-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
+                  <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                    Welcome to {activeSecondary}
+                  </h1>
+                  <p className="text-gray-600 dark:text-gray-400 mb-6">
+                    {` This page is coming soon. We're working hard to bring you
+                    amazing features!`}
+                  </p>
+                  <div className="inline-flex items-center px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-lg text-sm">
+                    <svg
+                      className="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    Page under development
+                  </div>
+                </div>
+              </div>
             </div>
           ) : (
             children
