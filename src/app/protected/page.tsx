@@ -4,6 +4,7 @@ import { authService } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/components/auth/protected-route";
 import TwoLevelSidebar from "@/components/layout/sidebar/two-level-sidebar";
+import { UnifiedButton } from "@/components/ui/unified-button";
 
 export default function ProtectedPage() {
   const router = useRouter();
@@ -22,12 +23,9 @@ export default function ProtectedPage() {
           </h1>
 
           <div className="mt-8">
-            <button
-              onClick={handleLogout}
-              className="inline-flex items-center px-6 py-2 rounded-lg bg-red-600 dark:bg-red-700 text-white font-medium shadow hover:bg-red-700 dark:hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors duration-200"
-            >
+            <UnifiedButton onClick={handleLogout} variant="danger" size="lg">
               Logout
-            </button>
+            </UnifiedButton>
           </div>
         </div>
       </TwoLevelSidebar>

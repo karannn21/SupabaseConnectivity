@@ -21,19 +21,23 @@ src/
 │   │   ├── login/               # Login page
 │   │   └── signup/              # Signup page
 │   ├── protected/               # Protected dashboard
+│   │   └── analytics-overview/  # Analytics page
 │   ├── layout.tsx               # Root layout
 │   └── page.tsx                 # Home page
 ├── components/                   # Reusable components
 │   ├── auth/                    # Authentication components
 │   ├── layout/                  # Layout components
 │   │   ├── navbar.tsx          # Navigation bar
-│   │   └── sidebar/            # Sidebar system
-│   └── ui/                     # UI components
+│   │   └── sidebar/            # Two-level sidebar system
+│   ├── providers/               # React context providers
+│   └── ui/                     # UI components & button system
 ├── hooks/                       # Custom React hooks
 ├── lib/                         # Utilities and configurations
 │   ├── auth.ts                 # Authentication service
+│   ├── button-config.ts        # Centralized button configuration
 │   ├── constants.ts            # App constants
-│   └── supabase.ts             # Supabase client
+│   ├── supabase.ts             # Supabase client
+│   └── utils.ts                # Utility functions
 └── types/                      # TypeScript type definitions
 ```
 

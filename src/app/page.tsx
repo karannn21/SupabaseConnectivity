@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { authService } from "@/lib/auth";
 import { User } from "@supabase/supabase-js";
 import LoadingSpinner from "@/components/ui/loading-spinner";
+import { UnifiedButton } from "@/components/ui/unified-button";
+import { Heading, Paragraph } from "@/components/ui/text";
 
 export default function HomePage() {
   const router = useRouter();
@@ -36,27 +38,38 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
       <div className="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 transition-colors duration-200">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+        <Heading
+          level={1}
+          size="2xl"
+          className="text-gray-900 dark:text-gray-100 mb-4"
+        >
           Welcome to Supa Auth 🚀
-        </h1>
+        </Heading>
         {user && (
-          <p className="text-gray-600 dark:text-gray-300 mb-6">
+          <Paragraph
+            size="base"
+            className="text-gray-600 dark:text-gray-300 mb-6"
+          >
             Logged in as: {user.email}
-          </p>
+          </Paragraph>
         )}
         <div className="space-y-4">
-          <button
+          <UnifiedButton
             onClick={() => router.push("/protected")}
-            className="w-full bg-indigo-600 dark:bg-indigo-700 text-white py-2 px-4 rounded-md hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors duration-200"
+            variant="info"
+            size="lg"
+            fullWidth
           >
             Go to Dashboard
-          </button>
-          <button
+          </UnifiedButton>
+          <UnifiedButton
             onClick={handleLogout}
-            className="w-full bg-red-600 dark:bg-red-700 text-white py-2 px-4 rounded-md hover:bg-red-700 dark:hover:bg-red-600 transition-colors duration-200"
+            variant="danger"
+            size="lg"
+            fullWidth
           >
             Logout
-          </button>
+          </UnifiedButton>
         </div>
       </div>
     </div>

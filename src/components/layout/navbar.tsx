@@ -11,7 +11,7 @@ export default function Navbar() {
   const { toggleTheme, isDark } = useTheme();
 
   return (
-    <header className="h-16 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6">
+    <header className="h-16 backdrop-blur-md bg-white/80 dark:bg-gray-900/80 border-b border-white/20 dark:border-gray-800/50 px-6 shadow-sm">
       <div className="flex items-center justify-between h-full max-w-full">
         {/* Left Section - Greeting */}
         <div className="flex items-center space-x-4 min-w-0">
@@ -35,21 +35,21 @@ export default function Navbar() {
             <input
               type="text"
               placeholder="Search candidates..."
-              className="w-full h-10 pl-10 pr-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+              className="w-full h-10 pl-10 pr-4 backdrop-blur-md bg-white/50 dark:bg-gray-800/50 border border-white/30 dark:border-gray-700/50 rounded-lg text-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:bg-white/70 dark:focus:bg-gray-800/70 transition-all duration-300"
             />
           </div>
         </div>
 
         {/* Right Section - Actions and Profile */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-2">
           {/* Bell Icon */}
           <Button
             className={cn(
               buttonVariants({ variant: "gradientBorder", size: "icon" }),
-              "p-[1px] rainbow-border border border-gray-200 dark:border-gray-800 hover:border-transparent"
+              "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300"
             )}
           >
-            <span className="flex items-center justify-center w-full h-full bg-white dark:bg-gray-900 rounded-lg transition-colors duration-200">
+            <span className="flex items-center justify-center w-full h-full backdrop-blur-sm bg-white/70 dark:bg-gray-900/70 rounded-lg transition-all duration-300">
               <Bell size={18} className="text-gray-700 dark:text-gray-300" />
             </span>
           </Button>
@@ -58,10 +58,10 @@ export default function Navbar() {
           <Button
             className={cn(
               buttonVariants({ variant: "gradientBorder", size: "icon" }),
-              "p-[1px] rainbow-border border border-gray-200 dark:border-gray-800 hover:border-transparent"
+              "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300"
             )}
           >
-            <span className="flex items-center justify-center w-full h-full bg-white dark:bg-gray-900 rounded-lg transition-colors duration-200">
+            <span className="flex items-center justify-center w-full h-full backdrop-blur-sm bg-white/70 dark:bg-gray-900/70 rounded-lg transition-all duration-300">
               <Calendar
                 size={18}
                 className="text-gray-700 dark:text-gray-300"
@@ -73,7 +73,7 @@ export default function Navbar() {
           <Button
             className={cn(
               buttonVariants({ variant: "gradientBorder" }),
-              "p-[1px] rainbow-border border border-gray-200 dark:border-gray-800 hover:border-transparent"
+              "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300 ml-2"
             )}
           >
             <span
@@ -81,26 +81,29 @@ export default function Navbar() {
               bg-black text-white 
               dark:bg-gray-900 dark:text-white
               rounded-lg px-4 py-1.5 gap-2 
-              transition-colors duration-200 text-sm font-medium"
+              transition-all duration-300 text-sm font-medium shadow-lg"
             >
-              <span className="text-yellow-500">✨</span>
+              <span className="text-yellow-400 animate-pulse">✨</span>
               <span>Upgrade</span>
             </span>
           </Button>
 
           {/* Theme Toggle */}
           <Button
-            onClick={toggleTheme}
+            onPress={toggleTheme}
             className={cn(
               buttonVariants({ variant: "gradientBorder", size: "icon" }),
-              "p-[1px] rainbow-border border border-gray-200 dark:border-gray-800 hover:border-transparent"
+              "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300 ml-2"
             )}
           >
-            <span className="flex items-center justify-center w-full h-full bg-white dark:bg-gray-900 rounded-lg transition-colors duration-200">
+            <span className="flex items-center justify-center w-full h-full backdrop-blur-sm bg-white/70 dark:bg-gray-900/70 rounded-lg transition-all duration-300">
               {isDark ? (
-                <Sun size={18} className="text-gray-700 dark:text-gray-300" />
+                <Sun
+                  size={18}
+                  className="text-yellow-500 dark:text-yellow-400"
+                />
               ) : (
-                <Moon size={18} className="text-gray-700 dark:text-gray-300" />
+                <Moon size={18} className="text-blue-600 dark:text-blue-400" />
               )}
             </span>
           </Button>
@@ -109,13 +112,13 @@ export default function Navbar() {
           <Button
             className={cn(
               buttonVariants({ variant: "gradientBorder", size: "icon" }),
-              "p-[1px] rainbow-border border border-gray-200 dark:border-gray-800 hover:border-transparent"
+              "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300"
             )}
           >
-            <span className="flex items-center justify-center w-full h-full bg-white dark:bg-gray-900 rounded-lg transition-colors duration-200">
+            <span className="flex items-center justify-center w-full h-full backdrop-blur-sm bg-white/70 dark:bg-gray-900/70 rounded-lg transition-all duration-300">
               <Settings
                 size={18}
-                className="text-gray-700 dark:text-gray-300"
+                className="text-gray-700 dark:text-gray-300 hover:rotate-90 transition-transform duration-300"
               />
             </span>
           </Button>
@@ -124,10 +127,10 @@ export default function Navbar() {
           <Button
             className={cn(
               buttonVariants({ variant: "gradientBorder", size: "icon" }),
-              "rounded-full p-0 rainbow-border"
+              "rounded-full p-0 rainbow-border hover:scale-110 transition-all duration-300 ml-2"
             )}
           >
-            <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-lg">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-lg shadow-lg">
               ST
             </div>
           </Button>

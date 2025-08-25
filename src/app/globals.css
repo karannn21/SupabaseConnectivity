@@ -63,3 +63,99 @@
     background-position: 0% 50%;
   }
 }
+
+/* 🌟 Glassmorphism Effects for Sidebar */
+.glass-morphism {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.4);
+}
+
+.dark .glass-morphism {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* 🌈 Rainbow border effect for glassmorphism buttons */
+.rainbow-border-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    45deg,
+    #ff0080 0%,
+    #7928ca 15%,
+    #0070f3 30%,
+    #00dfd8 45%,
+    #7928ca 60%,
+    #ff0080 75%,
+    #ff4081 90%,
+    #ff0080 100%
+  );
+  background-size: 400% 400%;
+  animation: rainbowGlassMove 3s ease-in-out infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Show rainbow border on hover for non-active buttons and always for active sidebar items */
+.rainbow-border-glass:not(.sidebar-active):hover::before,
+.rainbow-border-glass.sidebar-active::before {
+  opacity: 1;
+}
+
+@keyframes rainbowGlassMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 100% 50%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 🎨 Enhanced glassmorphism sidebar backgrounds */
+.sidebar-glass {
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  background: rgba(255, 255, 255, 0.12);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+.dark .sidebar-glass {
+  background: rgba(0, 0, 0, 0.4);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* 🔘 Improved toggle button styling */
+.toggle-glass {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.3);
+}
+
+.dark .toggle-glass {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.4);
+}
