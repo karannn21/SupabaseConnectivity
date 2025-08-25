@@ -44,6 +44,67 @@ export default function TwoLevelSidebar({
     }
   }, [pathname]);
 
+  // ✅ Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ctrl + B → Toggle sidebar
+      if (e.ctrlKey && e.key.toLowerCase() === "b") {
+        e.preventDefault();
+        toggleSecondary();
+      }
+
+      // Alt + ArrowRight → Next primary item
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        if (!activeItem) return;
+        const currentIndex = sidebarItems.findIndex((i) => i.id === activeItem);
+        const nextIndex = (currentIndex + 1) % sidebarItems.length;
+        handleIconClick(sidebarItems[nextIndex].id);
+      }
+
+      // Alt + ArrowLeft → Previous primary item
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        if (!activeItem) return;
+        const currentIndex = sidebarItems.findIndex((i) => i.id === activeItem);
+        const prevIndex =
+          (currentIndex - 1 + sidebarItems.length) % sidebarItems.length;
+        handleIconClick(sidebarItems[prevIndex].id);
+      }
+
+      // Alt + ArrowDown → Next subItem (inside activeItem)
+      if (e.key === "ArrowDown" && activeItem) {
+        const activeData = sidebarItems.find((i) => i.id === activeItem);
+        if (activeData?.subItems?.length) {
+          const currentIndex = activeData.subItems.findIndex(
+            (s) => s.label === activeSecondary
+          );
+          const nextIndex = (currentIndex + 1) % activeData.subItems.length;
+          setActiveSecondary(activeData.subItems[nextIndex].label);
+          setExpandedSubItem(activeData.subItems[nextIndex].label);
+        }
+      }
+
+      // Alt + ArrowUp → Previous subItem
+      if (e.key === "ArrowUp" && activeItem) {
+        const activeData = sidebarItems.find((i) => i.id === activeItem);
+        if (activeData?.subItems?.length) {
+          const currentIndex = activeData.subItems.findIndex(
+            (s) => s.label === activeSecondary
+          );
+          const prevIndex =
+            (currentIndex - 1 + activeData.subItems.length) %
+            activeData.subItems.length;
+          setActiveSecondary(activeData.subItems[prevIndex].label);
+          setExpandedSubItem(activeData.subItems[prevIndex].label);
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  });
+
   const handleIconClick = (itemId: string) => {
     if (activeItem === itemId && isSecondaryOpen) {
       setIsSecondaryOpen(false);
@@ -54,26 +115,18 @@ export default function TwoLevelSidebar({
       setActiveItem(itemId);
       setIsSecondaryOpen(true);
 
-      // ⚡ Agar Candidates pe click ho to by default Leads open karo
       const clickedItem = sidebarItems.find((i) => i.id === itemId);
-      console.log("Clicked item:", clickedItem?.label); // Debug log
-
       if (clickedItem?.label === "Candidates") {
         const leadsSub = clickedItem.subItems.find(
           (sub) => sub.label === "Leads"
         );
-        console.log("Found Leads sub:", leadsSub?.label); // Debug log
-
         if (leadsSub) {
           setExpandedSubItem("Leads");
           setActiveSecondary("Leads");
-          console.log("Set activeSecondary to: Leads"); // Debug log
         }
       } else {
-        // For other items, don't set activeSecondary initially
         setActiveSecondary(null);
         setExpandedSubItem(null);
-        console.log("Set activeSecondary to: null"); // Debug log
       }
     }
   };
@@ -350,7 +403,6 @@ export default function TwoLevelSidebar({
         <Navbar />
         <main className="flex-1 p-6 overflow-y-auto">
           {(() => {
-            console.log("Current activeSecondary:", activeSecondary); // Debug log
             return activeSecondary ? (
               <div className="max-w-4xl mx-auto">
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 border border-gray-200 dark:border-gray-700">
