@@ -37,7 +37,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
-      <div className="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 transition-colors duration-200">
+      <div className="max-w-md mx-auto bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 transition-colors duration-200">
         <Heading
           level={1}
           size="2xl"

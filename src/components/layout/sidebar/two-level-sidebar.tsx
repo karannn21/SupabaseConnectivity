@@ -17,6 +17,7 @@ import {
   SidebarMainButton,
   SidebarToggleButton,
 } from "@/components/ui/sidebar-button";
+import HeroCard from "@/components/ui/hero-card";
 import { cn } from "@/lib/utils";
 
 export default function TwoLevelSidebar({
@@ -158,7 +159,7 @@ export default function TwoLevelSidebar({
   return (
     <div className="flex h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900 transition-colors duration-200">
       {/* Primary Sidebar */}
-      <div className="w-16 bg-gray-100 dark:bg-gray-900 border-r border-gray-300 dark:border-white/10 flex flex-col items-center py-4">
+      <div className="w-16 bg-gray-100 dark:bg-[#141414] border-r border-gray-300 dark:border-white/10 flex flex-col items-center py-4 bg-grunge-texture">
         <div className="w-10 h-10 rounded-xl bg-gray-200 dark:bg-gray-800 flex items-center justify-center transition-all duration-300 hover:scale-105 shadow-lg">
           <Image
             src="/talent.png"
@@ -188,7 +189,7 @@ export default function TwoLevelSidebar({
                     className={cn(
                       "w-5 h-5 transition-all duration-300",
                       activeItem === item.id
-                        ? "text-gray-600 drop-shadow-lg stroke-2"
+                        ? "text-gray-900 dark:text-gray-100 drop-shadow-lg stroke-2"
                         : "text-gray-800 dark:text-gray-300 stroke-1"
                     )}
                     fill="none"
@@ -209,7 +210,7 @@ export default function TwoLevelSidebar({
         }`}
       >
         <div
-          className={`absolute left-0 top-0 h-full w-64 bg-gray-100 dark:bg-gray-900 border-r border-gray-300 dark:border-white/10 transition-all duration-300 ease-in-out overflow-hidden shadow-2xl z-10 ${
+          className={`absolute left-0 top-0 h-full w-64 bg-gray-100 dark:bg-[#141414] bg-grunge-texture transition-all duration-300 ease-in-out overflow-hidden shadow-2xl z-10 ${
             isSecondaryOpen
               ? "transform translate-x-0 opacity-100"
               : "transform -translate-x-full opacity-0"
@@ -244,7 +245,7 @@ export default function TwoLevelSidebar({
                             className={cn(
                               "h-5 w-5 flex-shrink-0 transition-all duration-300",
                               shouldShowAsActive
-                                ? "text-gray-600 drop-shadow-lg"
+                                ? "text-gray-900 dark:text-gray-100 drop-shadow-lg"
                                 : ""
                             )}
                           />
@@ -386,9 +387,9 @@ export default function TwoLevelSidebar({
         variant="ghost"
         onClick={toggleSecondary}
         title={isSecondaryOpen ? "Collapse Sidebar" : "Expand Sidebar"}
-        className={`absolute top-8 z-30 text-gray-700 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 ${
-          isSecondaryOpen ? "left-[320px]" : "left-16"
-        } transform -translate-x-1/2`}
+        className={`absolute top-5 z-30 text-gray-700 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400
+    border border-gray-400 dark:border-gray-600 rounded-full
+    ${isSecondaryOpen ? "left-[320px]" : "left-16"} transform -translate-x-1/2`}
         icon={
           <ArrowLeftIcon
             className={`h-4 w-4 transition-all duration-300 ${
@@ -401,20 +402,21 @@ export default function TwoLevelSidebar({
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 relative z-0">
         <Navbar />
-        <main className="flex-1 p-6 overflow-y-auto">
+        <main
+          className={`flex-1 overflow-y-auto ${
+            activeSecondary ? "p-0" : "p-6"
+          }`}
+        >
           {(() => {
             return activeSecondary ? (
-              <div className="max-w-4xl mx-auto">
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 border border-gray-200 dark:border-gray-700">
-                  <div className="text-center">
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-                      Welcome to {activeSecondary}
-                    </h1>
-                    <p className="text-gray-600 dark:text-gray-400 mb-6">
-                      This page is coming soon.
-                    </p>
-                  </div>
-                </div>
+              <div className="h-full relative z-10">
+                <HeroCard
+                  variant="default"
+                  title={activeSecondary}
+                  subtitle="Dashboard"
+                  description="Welcome to your dashboard section. This page is coming soon with exciting features!"
+                  className="w-full h-full rounded-lg bg-gray-100 dark:bg-[#141414] border-2 border-gray-400 dark:border-gray-600"
+                />
               </div>
             ) : (
               children

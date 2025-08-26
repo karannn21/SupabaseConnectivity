@@ -11,7 +11,7 @@ export default function Navbar() {
   const { toggleTheme, isDark } = useTheme();
 
   return (
-    <header className="h-16 backdrop-blur-md bg-white/80 dark:bg-gray-900/80 border-b border-white/20 dark:border-gray-800/50 px-6 shadow-sm">
+    <header className="h-16 backdrop-blur-md bg-gray-100 dark:bg-[#141414] bg-grunge-texture border-b border-white/20 dark:border-gray-800/50 px-6 shadow-sm">
       <div className="flex items-center justify-between h-full max-w-full">
         {/* Left Section - Greeting */}
         <div className="flex items-center space-x-4 min-w-0">
@@ -49,7 +49,7 @@ export default function Navbar() {
               "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300"
             )}
           >
-            <span className="flex items-center justify-center w-full h-full backdrop-blur-sm bg-white/70 dark:bg-gray-900/70 rounded-lg transition-all duration-300">
+            <span className="flex items-center justify-center w-full h-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-lg transition-all duration-300">
               <Bell size={18} className="text-gray-700 dark:text-gray-300" />
             </span>
           </Button>
@@ -61,7 +61,7 @@ export default function Navbar() {
               "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300"
             )}
           >
-            <span className="flex items-center justify-center w-full h-full backdrop-blur-sm bg-white/70 dark:bg-gray-900/70 rounded-lg transition-all duration-300">
+            <span className="flex items-center justify-center w-full h-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-lg transition-all duration-300">
               <Calendar
                 size={18}
                 className="text-gray-700 dark:text-gray-300"
@@ -96,7 +96,7 @@ export default function Navbar() {
               "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300 ml-2"
             )}
           >
-            <span className="flex items-center justify-center w-full h-full backdrop-blur-sm bg-white/70 dark:bg-gray-900/70 rounded-lg transition-all duration-300">
+            <span className="flex items-center justify-center w-full h-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-lg transition-all duration-300">
               {isDark ? (
                 <Sun
                   size={18}
@@ -115,7 +115,7 @@ export default function Navbar() {
               "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300"
             )}
           >
-            <span className="flex items-center justify-center w-full h-full backdrop-blur-sm bg-white/70 dark:bg-gray-900/70 rounded-lg transition-all duration-300">
+            <span className="flex items-center justify-center w-full h-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-lg transition-all duration-300">
               <Settings
                 size={18}
                 className="text-gray-700 dark:text-gray-300 hover:rotate-90 transition-transform duration-300"

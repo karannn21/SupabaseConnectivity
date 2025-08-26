@@ -9,19 +9,21 @@ export default function AnalyticsOverviewPage() {
     <ProtectedRoute>
       <TwoLevelSidebar>
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-8">
-            Analytics Overview
-          </h1>
+          <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md p-8 border border-gray-200 dark:border-gray-600">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-8">
+              Analytics Overview
+            </h1>
 
-          {/* HeroUI Card with Rainbow Hover Border */}
-          <div className="flex justify-center">
-            <HeroCard
-              variant="rainbow"
-              title="Analytics Card"
-              subtitle="Dashboard"
-              description="Hover to see the rainbow border effect!"
-              className="w-full max-w-sm"
-            />
+            {/* HeroUI Card with Rainbow Hover Border */}
+            <div className="flex justify-center">
+              <HeroCard
+                variant="rainbow"
+                title="Analytics Card"
+                subtitle="Dashboard"
+                description="Hover to see the rainbow border effect!"
+                className="w-full max-w-sm"
+              />
+            </div>
           </div>
         </div>
       </TwoLevelSidebar>

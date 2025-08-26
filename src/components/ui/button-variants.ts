@@ -15,6 +15,7 @@ export const buttonVariants = cva(
         secondary: BUTTON_VARIANTS.secondary,
         outline: BUTTON_VARIANTS.outline,
         ghost: BUTTON_VARIANTS.ghost,
+        sidebarActive: BUTTON_VARIANTS.sidebarActive,
         danger: BUTTON_VARIANTS.danger,
         success: BUTTON_VARIANTS.success,
         warning: BUTTON_VARIANTS.warning,

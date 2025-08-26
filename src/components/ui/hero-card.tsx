@@ -22,12 +22,27 @@ export default function HeroCard({
     return (
       <div
         className={cn(
-          "relative p-[1px] rounded-lg overflow-hidden rainbow-border border border-gray-200 dark:border-gray-800 hover:border-transparent",
+          "relative p-[1px] rounded-lg overflow-hidden rainbow-border hover:border-transparent",
           className
         )}
       >
         {/* Inner content wrapper with proper background */}
-        <div className="w-full h-full bg-white dark:bg-gray-900 rounded-lg p-6 shadow-sm transition-colors duration-200">
+        <div
+          className={cn(
+            "w-full h-full bg-white dark:bg-[#141414] rounded-lg p-6 shadow-sm transition-colors duration-200",
+            className?.includes("bg-") || className?.includes("border-")
+              ? className
+                  .split(" ")
+                  .filter(
+                    (c) =>
+                      c.startsWith("bg-") ||
+                      c.startsWith("dark:bg-") ||
+                      c.startsWith("border")
+                  )
+                  .join(" ")
+              : ""
+          )}
+        >
           {title && (
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               {title}
@@ -59,7 +74,7 @@ export default function HeroCard({
   return (
     <div
       className={cn(
-        "w-full rounded-lg p-6 shadow-sm bg-white dark:bg-gray-900",
+        "w-full rounded-lg p-6 shadow-sm bg-white dark:bg-[#141414]",
         className
       )}
     >

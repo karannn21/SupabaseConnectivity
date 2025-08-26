@@ -162,9 +162,8 @@ export const BUTTON_VARIANTS = {
     "bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300",
 
   // 🔥 New variant for active sidebar buttons
-
   sidebarActive:
-    "bg-gray-200 text-gray-900 hover:bg-gray-200 [&_svg]:text-gray-900",
+    "bg-gray-200 text-gray-900 hover:bg-gray-300 dark:bg-gray-500 dark:text-gray-100 dark:hover:bg-gray-600 [&_svg]:text-gray-900 dark:[&_svg]:text-gray-100",
 
   danger:
     "bg-red-600 text-white hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600",
