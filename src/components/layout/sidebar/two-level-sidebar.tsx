@@ -157,7 +157,7 @@ export default function TwoLevelSidebar({
   const activeItemData = sidebarItems.find((item) => item.id === activeItem);
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900 transition-colors duration-200">
+    <div className="flex h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900 transition-colors duration-200 bg-grunge-texture">
       {/* Primary Sidebar */}
       <div className="w-16 bg-gray-100 dark:bg-[#141414] border-r border-gray-300 dark:border-white/10 flex flex-col items-center py-4 bg-grunge-texture">
         <div className="w-10 h-10 rounded-xl bg-gray-200 dark:bg-gray-800 flex items-center justify-center transition-all duration-300 hover:scale-105 shadow-lg">
@@ -402,11 +402,7 @@ export default function TwoLevelSidebar({
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 relative z-0">
         <Navbar />
-        <main
-          className={`flex-1 overflow-y-auto ${
-            activeSecondary ? "p-0" : "p-6"
-          }`}
-        >
+        <main className="flex-1 overflow-y-auto pt-0 pl-0 pb-6 pr-6">
           {(() => {
             return activeSecondary ? (
               <div className="h-full relative z-10">

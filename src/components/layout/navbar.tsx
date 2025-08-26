@@ -11,7 +11,7 @@ export default function Navbar() {
   const { toggleTheme, isDark } = useTheme();
 
   return (
-    <header className="h-16 backdrop-blur-md bg-gray-100 dark:bg-[#141414] bg-grunge-texture border-b border-white/20 dark:border-gray-800/50 px-6 shadow-sm">
+    <header className="h-16 backdrop-blur-md bg-gray-100 dark:bg-[#141414] bg-grunge-texture  px-6 ">
       <div className="flex items-center justify-between h-full max-w-full">
         {/* Left Section - Greeting */}
         <div className="flex items-center space-x-4 min-w-0">
@@ -41,12 +41,12 @@ export default function Navbar() {
         </div>
 
         {/* Right Section - Actions and Profile */}
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-3">
           {/* Bell Icon */}
           <Button
             className={cn(
-              buttonVariants({ variant: "gradientBorder", size: "icon" }),
-              "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300"
+              buttonVariants({ variant: "gradientBorder", size: "default" }),
+              "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300 w-10"
             )}
           >
             <span className="flex items-center justify-center w-full h-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-lg transition-all duration-300">
@@ -57,8 +57,8 @@ export default function Navbar() {
           {/* Calendar Icon */}
           <Button
             className={cn(
-              buttonVariants({ variant: "gradientBorder", size: "icon" }),
-              "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300"
+              buttonVariants({ variant: "gradientBorder", size: "default" }),
+              "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300 w-10"
             )}
           >
             <span className="flex items-center justify-center w-full h-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-lg transition-all duration-300">
@@ -72,15 +72,15 @@ export default function Navbar() {
           {/* Upgrade Button */}
           <Button
             className={cn(
-              buttonVariants({ variant: "gradientBorder" }),
-              "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300 ml-2"
+              buttonVariants({ variant: "gradientBorder", size: "default" }),
+              "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300"
             )}
           >
             <span
               className="flex items-center justify-center w-full h-full 
               bg-black text-white 
               dark:bg-gray-900 dark:text-white
-              rounded-lg px-4 py-1.5 gap-2 
+              rounded-lg px-4 py-2 gap-2 
               transition-all duration-300 text-sm font-medium shadow-lg"
             >
               <span className="text-yellow-400 animate-pulse">✨</span>
@@ -92,8 +92,8 @@ export default function Navbar() {
           <Button
             onPress={toggleTheme}
             className={cn(
-              buttonVariants({ variant: "gradientBorder", size: "icon" }),
-              "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300 ml-2"
+              buttonVariants({ variant: "gradientBorder", size: "default" }),
+              "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300 w-10"
             )}
           >
             <span className="flex items-center justify-center w-full h-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-lg transition-all duration-300">
@@ -111,8 +111,8 @@ export default function Navbar() {
           {/* Settings */}
           <Button
             className={cn(
-              buttonVariants({ variant: "gradientBorder", size: "icon" }),
-              "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300"
+              buttonVariants({ variant: "gradientBorder", size: "default" }),
+              "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300 w-10"
             )}
           >
             <span className="flex items-center justify-center w-full h-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-lg transition-all duration-300">
@@ -126,11 +126,11 @@ export default function Navbar() {
           {/* Profile Avatar */}
           <Button
             className={cn(
-              buttonVariants({ variant: "gradientBorder", size: "icon" }),
-              "rounded-full p-0 rainbow-border hover:scale-110 transition-all duration-300 ml-2"
+              buttonVariants({ variant: "gradientBorder", size: "default" }),
+              "rounded-full p-[1px] rainbow-border hover:scale-110 transition-all duration-300 w-10"
             )}
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-lg shadow-lg">
+            <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg">
               ST
             </div>
           </Button>

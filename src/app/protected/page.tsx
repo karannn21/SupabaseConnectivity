@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/components/auth/protected-route";
 import TwoLevelSidebar from "@/components/layout/sidebar/two-level-sidebar";
 import { UnifiedButton } from "@/components/ui/unified-button";
-import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
+import HeroCard from "@/components/ui/hero-card";
 
 export default function ProtectedPage() {
   const router = useRouter();
@@ -18,26 +18,24 @@ export default function ProtectedPage() {
   return (
     <ProtectedRoute>
       <TwoLevelSidebar>
-        <div className="max-w-4xl mx-auto p-6">
-          <Card className="shadow-lg border border-gray-200 dark:border-gray-600 dark:bg-gray-700">
-            <CardHeader>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-                Welcome to Dashboard
-              </h1>
-            </CardHeader>
-
-            <CardBody>
-              <p className="text-gray-600 dark:text-gray-300">
-                This is your protected dashboard page.
-              </p>
-            </CardBody>
-
-            <CardFooter>
-              <UnifiedButton onClick={handleLogout} variant="danger" size="lg">
-                Logout
-              </UnifiedButton>
-            </CardFooter>
-          </Card>
+        <div className="h-full relative z-10">
+          <HeroCard
+            variant="default"
+            title="Welcome to Dashboard"
+            subtitle="Dashboard"
+            description="This is your protected dashboard page. Exciting features are coming soon!"
+            className="w-full h-full rounded-lg bg-gray-100 dark:bg-[#141414] border-2 border-gray-400 dark:border-gray-600"
+          />
+          <div className="absolute bottom-6 left-6">
+            <UnifiedButton
+              onClick={handleLogout}
+              variant="danger"
+              size="lg"
+              className="rounded-xl shadow-md"
+            >
+              Logout
+            </UnifiedButton>
+          </div>
         </div>
       </TwoLevelSidebar>
     </ProtectedRoute>
