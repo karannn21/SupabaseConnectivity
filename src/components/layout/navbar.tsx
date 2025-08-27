@@ -27,9 +27,9 @@ export default function Navbar() {
 
         {/* Center Section - Search */}
         <div className="flex-1 max-w-md mx-8">
-          <div className="relative">
+          <div className="relative ">
             <Search
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 z-10"
+              className=" absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 z-10"
               size={18}
             />
             <input

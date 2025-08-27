@@ -8,6 +8,8 @@ import {
   ArrowLeftIcon,
   ChevronRightIcon,
   ChevronDownIcon,
+  QuestionMarkCircleIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { sidebarItems } from "./sidebar-config";
 import Navbar from "../navbar";
@@ -20,6 +22,76 @@ import {
 import HeroCard from "@/components/ui/hero-card";
 import { cn } from "@/lib/utils";
 
+// Help Modal Component
+const KeyboardShortcutsModal = ({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) => {
+  const shortcuts = [
+    { key: "Ctrl + B", description: "Toggle sidebar open/close" },
+    {
+      key: "→ (Right Arrow)",
+      description: "Navigate to next primary menu item",
+    },
+    {
+      key: "← (Left Arrow)",
+      description: "Navigate to previous primary menu item",
+    },
+    { key: "↓ (Down Arrow)", description: "Navigate to next sub-item" },
+    { key: "↑ (Up Arrow)", description: "Navigate to previous sub-item" },
+    { key: "? (Question Mark)", description: "Show this help dialog" },
+    { key: "Escape", description: "Close help dialog" },
+  ];
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 max-h-96 overflow-y-auto">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-600">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            Keyboard Shortcuts
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+          >
+            <XMarkIcon className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="p-6">
+          <div className="space-y-3">
+            {shortcuts.map((shortcut, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <span className="text-sm text-gray-600 dark:text-gray-300">
+                  {shortcut.description}
+                </span>
+                <kbd className="px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">
+                  {shortcut.key}
+                </kbd>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <p className="text-xs text-gray-600 dark:text-gray-300">
+              💡 <strong>Tip:</strong> Press{" "}
+              <kbd className="px-1 py-0.5 text-xs bg-gray-200 dark:bg-gray-600 rounded">
+                ?
+              </kbd>{" "}
+              anytime to open this help
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function TwoLevelSidebar({
   children,
 }: {
@@ -30,6 +102,7 @@ export default function TwoLevelSidebar({
   const [isSecondaryOpen, setIsSecondaryOpen] = useState(false);
   const [activeSecondary, setActiveSecondary] = useState<string | null>(null);
   const [expandedSubItem, setExpandedSubItem] = useState<string | null>(null);
+  const [showHelpModal, setShowHelpModal] = useState(false);
 
   useEffect(() => {
     const analyticsOverviewPath = "/protected/analytics-overview";
@@ -45,16 +118,33 @@ export default function TwoLevelSidebar({
     }
   }, [pathname]);
 
-  // ✅ Keyboard shortcuts
+  // ✅ Enhanced Keyboard shortcuts with help
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Show help modal with "?" key
+      if (e.key === "?" && !e.ctrlKey && !e.altKey) {
+        e.preventDefault();
+        setShowHelpModal(true);
+        return;
+      }
+
+      // Hide help modal with Escape
+      if (e.key === "Escape" && showHelpModal) {
+        e.preventDefault();
+        setShowHelpModal(false);
+        return;
+      }
+
+      // Don't process other shortcuts if help modal is open
+      if (showHelpModal) return;
+
       // Ctrl + B → Toggle sidebar
       if (e.ctrlKey && e.key.toLowerCase() === "b") {
         e.preventDefault();
         toggleSecondary();
       }
 
-      // Alt + ArrowRight → Next primary item
+      // ArrowRight → Next primary item
       if (e.key === "ArrowRight") {
         e.preventDefault();
         if (!activeItem) return;
@@ -63,7 +153,7 @@ export default function TwoLevelSidebar({
         handleIconClick(sidebarItems[nextIndex].id);
       }
 
-      // Alt + ArrowLeft → Previous primary item
+      // ArrowLeft → Previous primary item
       if (e.key === "ArrowLeft") {
         e.preventDefault();
         if (!activeItem) return;
@@ -73,8 +163,9 @@ export default function TwoLevelSidebar({
         handleIconClick(sidebarItems[prevIndex].id);
       }
 
-      // Alt + ArrowDown → Next subItem (inside activeItem)
+      // ArrowDown → Next subItem (inside activeItem)
       if (e.key === "ArrowDown" && activeItem) {
+        e.preventDefault();
         const activeData = sidebarItems.find((i) => i.id === activeItem);
         if (activeData?.subItems?.length) {
           const currentIndex = activeData.subItems.findIndex(
@@ -86,8 +177,9 @@ export default function TwoLevelSidebar({
         }
       }
 
-      // Alt + ArrowUp → Previous subItem
+      // ArrowUp → Previous subItem
       if (e.key === "ArrowUp" && activeItem) {
+        e.preventDefault();
         const activeData = sidebarItems.find((i) => i.id === activeItem);
         if (activeData?.subItems?.length) {
           const currentIndex = activeData.subItems.findIndex(
@@ -104,7 +196,7 @@ export default function TwoLevelSidebar({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  });
+  }, [activeItem, activeSecondary, showHelpModal]);
 
   const handleIconClick = (itemId: string) => {
     if (activeItem === itemId && isSecondaryOpen) {
@@ -146,8 +238,15 @@ export default function TwoLevelSidebar({
 
   const handleSubItemClick = (sub: SubItem) => {
     if (sub.subItems) {
-      setExpandedSubItem(sub.label);
-      setActiveSecondary(sub.label);
+      // Toggle expansion: close if already expanded, open if collapsed
+      if (expandedSubItem === sub.label) {
+        setExpandedSubItem(null);
+        // Keep the parent active but clear nested selection
+        setActiveSecondary(sub.label);
+      } else {
+        setExpandedSubItem(sub.label);
+        setActiveSecondary(sub.label);
+      }
     } else {
       setActiveSecondary(sub.label);
       setExpandedSubItem(null);
@@ -158,6 +257,12 @@ export default function TwoLevelSidebar({
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900 transition-colors duration-200 bg-grunge-texture">
+      {/* Help Modal */}
+      <KeyboardShortcutsModal
+        isOpen={showHelpModal}
+        onClose={() => setShowHelpModal(false)}
+      />
+
       {/* Primary Sidebar */}
       <div className="w-16 bg-gray-100 dark:bg-[#141414] border-r border-gray-300 dark:border-white/10 flex flex-col items-center py-4 bg-grunge-texture">
         <div className="w-10 h-10 rounded-xl bg-gray-200 dark:bg-gray-800 flex items-center justify-center transition-all duration-300 hover:scale-105 shadow-lg">
@@ -170,7 +275,7 @@ export default function TwoLevelSidebar({
           />
         </div>
 
-        <div className="flex flex-col items-center space-y-1 mt-9 w-full px-2">
+        <div className="flex flex-col items-center space-y-1 mt-9 w-full px-2 flex-1">
           {sidebarItems.map((item) => {
             const Icon =
               activeItem === item.id ? item.iconSolid : item.iconOutline;
@@ -182,7 +287,7 @@ export default function TwoLevelSidebar({
                 size="sidebar-main"
                 active={activeItem === item.id}
                 onClick={() => handleIconClick(item.id)}
-                title={item.label}
+                title={`${item.label} (Arrow keys to navigate)`}
                 fullWidth={false}
                 icon={
                   <Icon
@@ -200,6 +305,29 @@ export default function TwoLevelSidebar({
               />
             );
           })}
+        </div>
+
+        {/* Help Button in Sidebar */}
+        <div className="mt-auto mb-2 w-full px-2">
+          <SidebarButton
+            variant="ghost"
+            size="sidebar-main"
+            active={false}
+            onClick={() => setShowHelpModal(true)}
+            title="Keyboard Shortcuts (Press ?)"
+            fullWidth={false}
+            icon={
+              <QuestionMarkCircleIcon
+                className={cn(
+                  "w-5 h-5 transition-all duration-300",
+                  "text-gray-800 dark:text-gray-300 stroke-1"
+                )}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              />
+            }
+          />
         </div>
       </div>
 
@@ -332,7 +460,7 @@ export default function TwoLevelSidebar({
                                     }`}
                                   />
 
-                                  {/* Text */}
+                                  {/* Text with Icon */}
                                   {nested.label === "Analytics Overview" &&
                                   nested.href ? (
                                     <Link
@@ -340,13 +468,16 @@ export default function TwoLevelSidebar({
                                       onClick={() =>
                                         setActiveSecondary(nested.label)
                                       }
-                                      className={`cursor-pointer p-2 pl-10 transition-all duration-200 rounded flex-1 min-w-0 text-left w-full block ${
+                                      className={`cursor-pointer p-2 pl-8 transition-all duration-200 rounded flex-1 min-w-0 text-left w-full block flex items-center gap-2 ${
                                         isNestedActive
                                           ? "text-blue-500 font-medium bg-transparent"
                                           : "hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200"
                                       }`}
                                     >
-                                      <span className="truncate block">
+                                      {nested.icon && (
+                                        <nested.icon className="w-4 h-4 flex-shrink-0" />
+                                      )}
+                                      <span className="truncate">
                                         {nested.label}
                                       </span>
                                     </Link>
@@ -356,13 +487,16 @@ export default function TwoLevelSidebar({
                                       onClick={() =>
                                         setActiveSecondary(nested.label)
                                       }
-                                      className={`cursor-pointer p-2 pl-10 transition-all duration-200 rounded flex-1 min-w-0 text-left w-full ${
+                                      className={`cursor-pointer p-2 pl-8 transition-all duration-200 rounded flex-1 min-w-0 text-left w-full flex items-center gap-2 ${
                                         isNestedActive
                                           ? "text-blue-500 font-medium bg-transparent"
                                           : "hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200"
                                       }`}
                                     >
-                                      <span className="truncate block">
+                                      {nested.icon && (
+                                        <nested.icon className="w-4 h-4 flex-shrink-0" />
+                                      )}
+                                      <span className="truncate">
                                         {nested.label}
                                       </span>
                                     </button>
@@ -386,7 +520,7 @@ export default function TwoLevelSidebar({
       <SidebarToggleButton
         variant="ghost"
         onClick={toggleSecondary}
-        title={isSecondaryOpen ? "Collapse Sidebar" : "Expand Sidebar"}
+        title={`${isSecondaryOpen ? "Collapse" : "Expand"} Sidebar (Ctrl+B)`}
         className={`absolute top-5 z-30 text-gray-700 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400
     border border-gray-400 dark:border-gray-600 rounded-full
     ${isSecondaryOpen ? "left-[320px]" : "left-16"} transform -translate-x-1/2`}
