@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Search, Bell, Calendar, Sun, Moon, Settings } from "lucide-react";
 import { Button } from "@heroui/button";
 import { cn } from "@/lib/utils";
@@ -9,6 +9,20 @@ import { useTheme } from "@/components/providers/theme-provider";
 
 export default function Navbar() {
   const { toggleTheme, isDark } = useTheme();
+  const [isSettingsClicked, setIsSettingsClicked] = useState(false);
+  const [isBellClicked, setIsBellClicked] = useState(false);
+
+  const handleSettingsClick = () => {
+    setIsSettingsClicked(true);
+    // Reset animation after it completes
+    setTimeout(() => setIsSettingsClicked(false), 600);
+  };
+
+  const handleBellClick = () => {
+    setIsBellClicked(true);
+    // Reset animation after it completes
+    setTimeout(() => setIsBellClicked(false), 600);
+  };
 
   return (
     <header className="h-16 backdrop-blur-md bg-gray-100 dark:bg-[#141414] bg-grunge-texture  px-6 ">
@@ -44,13 +58,21 @@ export default function Navbar() {
         <div className="flex items-center space-x-3">
           {/* Bell Icon */}
           <Button
+            onPress={handleBellClick}
             className={cn(
               buttonVariants({ variant: "gradientBorder", size: "default" }),
               "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300 w-10"
             )}
           >
             <span className="flex items-center justify-center w-full h-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-lg transition-all duration-300">
-              <Bell size={18} className="text-gray-700 dark:text-gray-300" />
+              <Bell
+                size={18}
+                className={cn(
+                  "text-gray-700 dark:text-gray-300 transition-all duration-300",
+                  isBellClicked &&
+                    "animate-bounce text-blue-500 dark:text-blue-400"
+                )}
+              />
             </span>
           </Button>
 
@@ -110,6 +132,7 @@ export default function Navbar() {
 
           {/* Settings */}
           <Button
+            onPress={handleSettingsClick}
             className={cn(
               buttonVariants({ variant: "gradientBorder", size: "default" }),
               "p-[1px] rainbow-border hover:border-transparent hover:scale-105 transition-all duration-300 w-10"
@@ -118,7 +141,12 @@ export default function Navbar() {
             <span className="flex items-center justify-center w-full h-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-lg transition-all duration-300">
               <Settings
                 size={18}
-                className="text-gray-700 dark:text-gray-300 hover:rotate-90 transition-transform duration-300"
+                className={cn(
+                  "text-gray-700 dark:text-gray-300 transition-all duration-300",
+                  isSettingsClicked
+                    ? "animate-spin text-purple-500 dark:text-purple-400"
+                    : "hover:rotate-90"
+                )}
               />
             </span>
           </Button>
